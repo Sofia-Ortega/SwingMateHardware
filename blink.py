@@ -16,11 +16,20 @@ async def connect_to_device(address):
    async with BleakClient(address) as client:
       print("Connected to device:", address)
 
-       # WRITE VALUE
-      value_to_write = "howdy"
-      value_to_write_bytes = bytearray(value_to_write.encode('utf-8'))
-      await client.write_gatt_char(CHARACTERISTIC_UUID, value_to_write_bytes)
+      # WRITE VALUE
+      for i in range(10):
+        value_to_write = 1  # Example: 0 or 1
+        value_to_write_bytes = value_to_write.to_bytes(1, byteorder='little')  # Convert number to bytes
+        await client.write_gatt_char(CHARACTERISTIC_UUID, value_to_write_bytes)
+        
+        sleep(2)
 
+        value_to_write = 0  # Example: 0 or 1
+        value_to_write_bytes = value_to_write.to_bytes(1, byteorder='little')  # Convert number to bytes
+        await client.write_gatt_char(CHARACTERISTIC_UUID, value_to_write_bytes)
+
+        sleep(2)
+      
       '''
       # READS VALUE
       for i in range(10):
