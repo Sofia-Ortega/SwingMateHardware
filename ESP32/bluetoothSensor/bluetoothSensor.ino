@@ -49,9 +49,28 @@ void loop() {
   sensors_event_t event; 
   bno.getEvent(&event);
   if(deviceConnected) {
-    float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
+
+    float x, y, z;
+    x = event.orientation.x;
+    y = event.orientation.y;
+    z = event.orientation.z;
+
+    /* Display the floating point data */
+    Serial.print("X: ");
+    Serial.print(x, 4);
+    Serial.print("\tY: ");
+    Serial.print(y, 4);
+    Serial.print("\tZ: ");
+    Serial.print(z, 4);
+    Serial.println("");
+
+
+    float orientation[3] = {x, y, z};
+    
     pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
-    pCharacteristic->notify();
-    delay(100); // Add delay if needed to control the data rate
+  } else {
+    pServer->getAdvertising()->start();
   }
+
+  delay(100); // Add delay if needed to control the data rate
 }
