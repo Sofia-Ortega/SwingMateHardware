@@ -4,6 +4,7 @@ from time import sleep
 import struct
 
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+CHIP_NAME = "OrientationSensorBLE"
 
 def parse_orientation_data(value):
     # Ensure the received value is not empty and has a length of 12 bytes (3 floats * 4 bytes each)
@@ -28,18 +29,14 @@ async def run():
         await connect_to_device(d.address)
 
 async def connect_to_device(address):
+  print("about to connect")
   async with BleakClient(address) as client:
     print("Connected to device:", address)
 
-      # WRITE VALUE
-    '''
-    value_to_write = "howdy"
-    value_to_write_bytes = bytearray(value_to_write.encode('utf-8'))
-    await client.write_gatt_char(CHARACTERISTIC_UUID, value_to_write_bytes)
-    '''
     # READS VALUE
     while True:
       value = await client.read_gatt_char(CHARACTERISTIC_UUID)
+      print("read!")
       orientation_data = parse_orientation_data(value)
       if orientation_data:
         print("Orientation data (X, Y, Z):", orientation_data)

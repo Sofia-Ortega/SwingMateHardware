@@ -4,6 +4,7 @@ from time import sleep
 
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 CHIP_NAME = "MyESP32 :D"
+CHIP_NAME = "OrientationSensorBLE"
 
 
 async def run():
