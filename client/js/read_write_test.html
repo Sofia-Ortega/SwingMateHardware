@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BLE Scanner</title>
+  </head>
+  <body>
+    <h1>BLE Scanner</h1>
+    <div id="devices"></div>
+    <script>
+      const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+      const CHIP_NAME = "MyESP32 :D";
+
+      async function connectToDevice(device) {
+        console.log("Connecting to device:", device.name);
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService(
+          "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+        );
+
+        console.log("Connected to device:", device.name);
+        const characteristic = await service.getCharacteristic(
+          CHARACTERISTIC_UUID
+        );
+
+        console.log("got charactersitc");
+        /*
+        // Start reading characteristic value
+        characteristic.startNotifications();
+        characteristic.addEventListener(
+          "characteristicvaluechanged",
+          handleCharacteristicValueChanged
+        );
+
+        */
+
+        readChar(characteristic);
+
+        console.log("read charact");
+      }
+
+      async function readChar(characteristic) {
+        let count = 1;
+
+        const readValue = () => {
+          return new Promise((resolve, reject) => {
+            characteristic.readValue().then(resolve).catch(reject);
+          });
+        };
+
+        const intervalId = setInterval(async () => {
+          count++;
+
+          // print out value from characteristic here
+          try {
+            const val = await readValue();
+            // console.log("Received value:", val);
+
+            const decoder = new TextDecoder("utf-8");
+            const decodedValue = decoder.decode(val);
+            console.log("Received value:", decodedValue);
+          } catch (error) {
+            console.error("Error while reading value:", error);
+          }
+
+          if (count > 10) {
+            clearInterval(intervalId);
+          }
+        }, 2000);
+      }
+
+      async function scanDevices() {
+        console.log("Scanning...");
+        try {
+          const device = await navigator.bluetooth.requestDevice({
+            filters: [{ name: CHIP_NAME }],
+            optionalServices: [
+              "generic_access",
+              "4fafc201-1fb5-459e-8fcc-c5c9c331914b",
+            ], // Add your service UUID here
+          });
+          console.log("Found device:", device.name);
+          await connectToDevice(device);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    </script>
+    <button onclick="scanDevices()">Connect</button>
+  </body>
+</html>

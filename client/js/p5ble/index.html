@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Getting Started with p5.ble.js</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"
+      integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://unpkg.com/p5ble@0.0.7/dist/p5.ble.js"></script>
+  </head>
+
+  <body>
+    <script>
+      // Your code will go here
+      const serviceUuid = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+      let myCharacteristic;
+      let myValue = 0;
+      let myBLE;
+
+      function setup() {
+        // create a p5ble class
+        myBLE = new p5ble();
+
+        // canvas
+        createCanvas(200, 200);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+
+        // create 'connect' btn
+        const connectBtn = createButton("connect");
+        connectBtn.mousePressed(connectToBle);
+      }
+
+      function connectToBle() {
+        myBLE.connect(serviceUuid, (error, characteristics) => {
+          if (error) console.log("error", error);
+          console.log("characteristics: ", characteristics);
+        });
+      }
+    </script>
+  </body>
+</html>
