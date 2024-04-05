@@ -9,6 +9,12 @@ let rotationX = 0;
 let rotationY = 0;
 let rotationZ = 0;
 
+const bluetoothManager = new BluetoothManager(
+  CHARACTERISTIC_UUID,
+  SERVICE_UUID,
+  CHIP_NAME
+);
+
 function setup() {
   createCanvas(710, 400, WEBGL);
   angleMode(DEGREES);
@@ -16,10 +22,10 @@ function setup() {
   frameRate(10);
 
   const connectBtn = createButton("connect");
-  connectBtn.mousePressed(scanDevices);
+  connectBtn.mousePressed(bluetoothManager.scanDevices);
 
   const disconnectBtn = createButton("disconnect");
-  disconnectBtn.mousePressed(disconnect);
+  disconnectBtn.mousePressed(bluetoothManager.disconnect);
 }
 
 async function draw() {
@@ -27,11 +33,12 @@ async function draw() {
   const deltaTime = now - lastUpdate;
 
   // Check if the specified interval has elapsed
-  if (connected && deltaTime >= updateInterval) {
+  if (bluetoothManager.connected && deltaTime >= updateInterval) {
     lastUpdate = now;
 
     // Update rotation angles here
-    coord = await getCoord();
+
+    coord = await bluetoothManager.getCoord();
     console.log(coord);
 
     rotationX = coord[0];
