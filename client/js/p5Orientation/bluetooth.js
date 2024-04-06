@@ -1,12 +1,6 @@
 class BluetoothManager {
-    constructor(characteristicUUID, serviceUUID, chipName) {
-        this.characteristicUUID = characteristicUUID;
-        this.serviceUUID = serviceUUID;
+    constructor(chipName) {
         this.chipName = chipName;
-
-        console.log("constructed");
-        console.log(this.chipName);
-        console.log(this.serviceUUID);
 
         this.device = null;
         this.characteristic = null;
@@ -21,9 +15,9 @@ class BluetoothManager {
 
         console.log("Connecting to device:", this.device.name);
         const server = await this.device.gatt.connect();
-        const service = await server.getPrimaryService(this.serviceUUID);
+        const service = await server.getPrimaryService(SERVICE_UUID);
         this.characteristic = await service.getCharacteristic(
-            this.characteristicUUID
+            CHARACTERISTIC_UUID
         );
 
         console.log("Connected to device:", this.device.name);
@@ -56,11 +50,9 @@ class BluetoothManager {
     async scanDevices() {
         console.log("Scanning...");
         try {
-            console.log(this.chipName);
-            console.log(this.serviceUUID);
             this.device = await navigator.bluetooth.requestDevice({
                 filters: [{ name: this.chipName }],
-                optionalServices: ["generic_access", this.serviceUUID],
+                optionalServices: ["generic_access", SERVICE_UUID],
             });
 
             console.log("Found device:", this.device.name);

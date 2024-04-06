@@ -13,17 +13,8 @@ let rotationX2 = 0;
 let rotationY2 = 0;
 let rotationZ2 = 0;
 
-const upperarmBluetoothManager = new BluetoothManager(
-    CHARACTERISTIC_UUID,
-    SERVICE_UUID,
-    UPPERARM_CHIP_NAME
-);
-
-const forearmBluetoothManager = new BluetoothManager(
-    CHARACTERISTIC_UUID,
-    SERVICE_UUID,
-    FOREARM_CHIP_NAME
-);
+const upperarmBluetoothManager = new BluetoothManager(UPPERARM_CHIP_NAME);
+const forearmBluetoothManager = new BluetoothManager(FOREARM_CHIP_NAME);
 
 function setup() {
     createCanvas(710, 400, WEBGL);
