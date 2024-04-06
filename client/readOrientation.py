@@ -4,7 +4,8 @@ from time import sleep
 import struct
 
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-CHIP_NAME = "OrientationSensorBLE"
+CHIP_NAME = "UPPERARM_CHIP"
+# CHIP_NAME = "FOREARM_CHIP"
 
 def parse_orientation_data(value):
     # Ensure the received value is not empty and has a length of 12 bytes (3 floats * 4 bytes each)
@@ -24,7 +25,7 @@ async def run():
     print("Found devices:")
     for d in devices:
       print("Found device:", d.name, "with address:", d.address)
-      if d.name and "OrientationSensorBLE" in d.name:
+      if d.name and CHIP_NAME in d.name:
         print("Found device:", d.name, "with address:", d.address)
         await connect_to_device(d.address)
 

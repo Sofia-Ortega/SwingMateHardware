@@ -9,10 +9,16 @@ let rotationX = 0;
 let rotationY = 0;
 let rotationZ = 0;
 
-const bluetoothManager = new BluetoothManager(
+const upperarmBluetoothManager = new BluetoothManager(
     CHARACTERISTIC_UUID,
     SERVICE_UUID,
-    CHIP_NAME
+    UPPERARM_CHIP_NAME
+);
+
+const forearmBluetoothManager = new BluetoothManager(
+    CHARACTERISTIC_UUID,
+    SERVICE_UUID,
+    FOREARM_CHIP_NAME
 );
 
 function setup() {
@@ -21,14 +27,24 @@ function setup() {
 
     frameRate(10);
 
-    const connectBtn = createButton("connect");
-    connectBtn.mousePressed(() => {
-        bluetoothManager.scanDevices();
+    const connectUpperarmBtn = createButton("connect upperarm");
+    connectUpperarmBtn.mousePressed(() => {
+        upperarmBluetoothManager.scanDevices();
     });
 
-    const disconnectBtn = createButton("disconnect");
-    disconnectBtn.mousePressed(() => {
-        bluetoothManager.disconnect();
+    const disconnectUpperarmBtn = createButton("disconnect upperarm");
+    disconnectUpperarmBtn.mousePressed(() => {
+        upperarmBluetoothManager.disconnect();
+    });
+
+    const connectForearmBtn = createButton("connect Forearm");
+    connectForearmBtn.mousePressed(() => {
+        forearmBluetoothManager.scanDevices();
+    });
+
+    const disconnectForearmBtn = createButton("disconnect Forearm");
+    disconnectForearmBtn.mousePressed(() => {
+        forearmBluetoothManager.disconnect();
     });
 }
 
@@ -37,12 +53,12 @@ async function draw() {
     const deltaTime = now - lastUpdate;
 
     // Check if the specified interval has elapsed
-    if (bluetoothManager.connected && deltaTime >= updateInterval) {
+    if (upperarmBluetoothManager.connected && deltaTime >= updateInterval) {
         lastUpdate = now;
 
         // Update rotation angles here
 
-        coord = await bluetoothManager.getCoord();
+        coord = await upperarmBluetoothManager.getCoord();
 
         console.log(coord);
 
