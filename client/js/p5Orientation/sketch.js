@@ -9,6 +9,10 @@ let rotationX = 0;
 let rotationY = 0;
 let rotationZ = 0;
 
+let rotationX2 = 0;
+let rotationY2 = 0;
+let rotationZ2 = 0;
+
 const upperarmBluetoothManager = new BluetoothManager(
     CHARACTERISTIC_UUID,
     SERVICE_UUID,
@@ -69,9 +73,27 @@ async function draw() {
         }
     }
 
+    // Check if the specified interval has elapsed
+    if (forearmBluetoothManager.connected && deltaTime >= updateInterval) {
+        lastUpdate = now;
+
+        // Update rotation angles here
+
+        coord = await forearmBluetoothManager.getCoord();
+
+        console.log(coord);
+
+        if (coord && coord[0] != 0 && coord[1] != 0 && coord[2] != 0) {
+            rotationX2 = coord[0];
+            rotationY2 = coord[1];
+            rotationZ2 = coord[2];
+        }
+    }
+
     background(250);
     normalMaterial();
 
+    push();
     rotateX(rotationX);
     rotateY(rotationY);
     rotateZ(rotationZ);
@@ -87,4 +109,14 @@ async function draw() {
     // Draw the elbow sphere
     translate(0, boxHeight / 2, 0);
     sphere(jointRadius);
+
+    pop();
+
+    push();
+    rotateX(rotationX2);
+    rotateY(rotationY2);
+    rotateZ(rotationZ2);
+
+    box(boxWidth, boxHeight, 30);
+    pop();
 }
