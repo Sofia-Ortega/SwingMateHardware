@@ -6,10 +6,16 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <string>
+#include <time.h>
 
 using std::string;
 
 const string DEVICE_NAME = "OrientationSensor";
+const string SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+const string CHARACTERISTIC_UUID =  "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+
+time_t timer;
+struct tm y2k = {0};
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 BLECharacteristic *pCharacteristic;
@@ -19,41 +25,56 @@ bool deviceConnected = false;
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     deviceConnected = true;
+    Serial.println("Connected!");
   }
 
   void onDisconnect(BLEServer* pServer) {
     deviceConnected = false;
+    pServer->getAdvertising()->start();
+    Serial.println("Advertizing");
+
   }
 };
 
 void setup() {
+  // initialization
   Serial.begin(115200);
   BLEDevice::init(DEVICE_NAME);
   pServer = BLEDevice::createServer();
-  
   pServer->setCallbacks(new MyServerCallbacks());
-  BLEService *pService = pServer->createService("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
+
+  // creating service and characteristics
+  BLEService *pService = pServer->createService(SERVICE_UUID);
   pCharacteristic = pService->createCharacteristic(
-                                     "beb5483e-36e1-4688-b7f5-ea07361b26a8",
+                                     CHARACTERISTIC_UUID,
                                      BLECharacteristic::PROPERTY_READ |
                                      BLECharacteristic::PROPERTY_NOTIFY
                                     );
+
+  // starting
   pService->start();
-  BLEAdvertising *pAdvertising = pServer->getAdvertising();
-  pAdvertising->start();
+
+  pServer->getAdvertising()->start();
+
+
+
+  delay(1000);
+
+
   if(!bno.begin())
   {
     Serial.println("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
-  delay(1000);
-  bno.setExtCrystalUse(true);
 }
 
 void loop() {
   sensors_event_t event; 
   bno.getEvent(&event);
   if(deviceConnected) {
+
+    time(&timer);
+    float time_seconds = difftime(timer, mktime(&y2k)); 
 
     float x, y, z;
     x = event.orientation.x;
@@ -70,12 +91,11 @@ void loop() {
     Serial.println("");
 
 
-    float orientation[3] = {x, y, z};
+
+    float orientation[4] = {time_seconds, x, y, z};
     
     pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
-  } else {
-    pServer->getAdvertising()->start();
-  }
+  } 
 
   delay(100); // Add delay if needed to control the data rate
 }
