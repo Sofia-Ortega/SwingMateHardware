@@ -1,21 +1,19 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
-#include <utility/imumaths.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include <string>
-#include <time.h>
 
 using std::string;
 
-const string DEVICE_NAME = "OrientationSensor";
+// const string DEVICE_NAME = "UPPERARM_CHIP"; // UPPERARM 
+const string DEVICE_NAME = "FOREARM_CHIP"; // FOREARM 
+
 const string SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const string CHARACTERISTIC_UUID =  "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
-time_t timer;
-struct tm y2k = {0};
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 BLECharacteristic *pCharacteristic;
@@ -73,9 +71,6 @@ void loop() {
   bno.getEvent(&event);
   if(deviceConnected) {
 
-    time(&timer);
-    float time_seconds = difftime(timer, mktime(&y2k)); 
-
     float x, y, z;
     x = event.orientation.x;
     y = event.orientation.y;
@@ -90,9 +85,10 @@ void loop() {
     Serial.print(z, 4);
     Serial.println("");
 
+    // moving average
 
 
-    float orientation[4] = {time_seconds, x, y, z};
+    float orientation[3] = { x, y, z};
     
     pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
   } 
