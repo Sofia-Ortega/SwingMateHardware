@@ -1,94 +1,99 @@
 class BluetoothManager {
-  constructor(characteristicUUID, serviceUUID, chipName) {
-    this.characteristicUUID = characteristicUUID;
-    this.serviceUUID = serviceUUID;
-    this.chipName = chipName;
+    constructor(characteristicUUID, serviceUUID, chipName) {
+        this.characteristicUUID = characteristicUUID;
+        this.serviceUUID = serviceUUID;
+        this.chipName = chipName;
 
-    this.device = null;
-    this.characteristic = null;
-    this.connected = false;
-  }
+        console.log("constructed");
+        console.log(this.chipName);
+        console.log(this.serviceUUID);
 
-  async connectToDevice() {
-    if (!this.device) {
-      console.error("No device selected");
-      return;
+        this.device = null;
+        this.characteristic = null;
+        this.connected = false;
     }
 
-    console.log("Connecting to device:", this.device.name);
-    const server = await this.device.gatt.connect();
-    const service = await server.getPrimaryService(this.serviceUUID);
-    this.characteristic = await service.getCharacteristic(
-      this.characteristicUUID
-    );
+    async connectToDevice() {
+        if (!this.device) {
+            console.error("No device selected");
+            return;
+        }
 
-    console.log("Connected to device:", this.device.name);
-    this.connected = true;
+        console.log("Connecting to device:", this.device.name);
+        const server = await this.device.gatt.connect();
+        const service = await server.getPrimaryService(this.serviceUUID);
+        this.characteristic = await service.getCharacteristic(
+            this.characteristicUUID
+        );
 
-    return this.characteristic;
-  }
+        console.log("Connected to device:", this.device.name);
+        this.connected = true;
 
-  async disconnect() {
-    if (!this.device) {
-      console.error("No device to disconnect from.");
-      return;
+        return this.characteristic;
     }
 
-    if (!this.device.gatt) {
-      console.error("Device is not connected.");
-      return;
+    async disconnect() {
+        if (!this.device) {
+            console.error("No device to disconnect from.");
+            return;
+        }
+
+        if (!this.device.gatt) {
+            console.error("Device is not connected.");
+            return;
+        }
+
+        try {
+            this.connected = false;
+            console.log("Disconnecting from device:", this.device.name);
+            await this.device.gatt.disconnect();
+            console.log("Disconnected from device:", this.device.name);
+        } catch (error) {
+            console.error("Error while disconnecting:", error);
+        }
     }
 
-    try {
-      console.log("Disconnecting from device:", this.device.name);
-      await this.device.gatt.disconnect();
-      console.log("Disconnected from device:", this.device.name);
-      this.connected = false;
-    } catch (error) {
-      console.error("Error while disconnecting:", error);
-    }
-  }
+    async scanDevices() {
+        console.log("Scanning...");
+        try {
+            console.log(this.chipName);
+            console.log(this.serviceUUID);
+            this.device = await navigator.bluetooth.requestDevice({
+                filters: [{ name: this.chipName }],
+                optionalServices: ["generic_access", this.serviceUUID],
+            });
 
-  async scanDevices() {
-    console.log("Scanning...");
-    try {
-      this.device = await navigator.bluetooth.requestDevice({
-        filters: [{ name: this.chipName }],
-        optionalServices: ["generic_access", this.serviceUUID],
-      });
+            console.log("Found device:", this.device.name);
 
-      console.log("Found device:", this.device.name);
-
-      await this.connectToDevice();
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
-  async getCoord() {
-    if (!this.connected) {
-      return [0, 0, 0];
+            await this.connectToDevice();
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
 
-    const readValue = () => {
-      return new Promise((resolve, reject) => {
-        this.characteristic.readValue().then(resolve).catch(reject);
-      });
-    };
+    async getCoord() {
+        if (!this.connected) {
+            return [0, 0, 0];
+        }
 
-    try {
-      const val = await readValue();
-      console.log("Received value:", val);
+        const readValue = () => {
+            return new Promise((resolve, reject) => {
+                this.characteristic.readValue().then(resolve).catch(reject);
+            });
+        };
 
-      const coord = [
-        val.getFloat32(0, true),
-        val.getFloat32(4, true),
-        val.getFloat32(8, true),
-      ];
+        try {
+            const val = await readValue();
 
-      return coord;
-    } catch (error) {
-      console.error("Error while reading value:", error);
+            const coord = [
+                val.getFloat32(0, true),
+                val.getFloat32(4, true),
+                val.getFloat32(8, true),
+            ];
+
+            return coord;
+        } catch (error) {
+            console.error("Error while reading value:", error);
+        }
     }
-  }
 }

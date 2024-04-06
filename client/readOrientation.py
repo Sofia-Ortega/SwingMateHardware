@@ -36,7 +36,6 @@ async def connect_to_device(address):
     # READS VALUE
     while True:
       value = await client.read_gatt_char(CHARACTERISTIC_UUID)
-      print("read!")
       orientation_data = parse_orientation_data(value)
       if orientation_data:
         print("Orientation data (X, Y, Z):", orientation_data)
