@@ -1,0 +1,6 @@
+Okay so i have the arm. That uses shoulder angle to create the arm initially. 
+Next it uses elbow and wrist x,y and z to form the position.
+I added buttons to move wrist and elbow up and down in all 3 positions. To test for myself without the data.
+If we get truple values we can honesly just input that for x,y and z from three sensor, for each time. 
+
+we can see the arm in each time. Now the next task is how are we going to record each arm and make it like a video. 
