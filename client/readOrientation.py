@@ -28,20 +28,31 @@ async def run():
       if d.name and CHIP_NAME in d.name:
         print("Found device:", d.name, "with address:", d.address)
         await connect_to_device(d.address)
+        break
 
 async def connect_to_device(address):
   print("about to connect")
   async with BleakClient(address) as client:
     print("Connected to device:", address)
 
+    counter = 250
+
+    print("[")
+
     # READS VALUE
-    while True:
+    while counter >= 0:
       value = await client.read_gatt_char(CHARACTERISTIC_UUID)
       orientation_data = parse_orientation_data(value)
       if orientation_data:
-        print("Orientation data (X, Y, Z):", orientation_data)
+        x, y, z = orientation_data
+        print(f"[{x}, {y}, {z}],")
+        # print("Orientation data (X, Y, Z):", orientation_data)
 
       sleep(0.1)
+
+      counter -= 1
+    
+    print("]")
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())
