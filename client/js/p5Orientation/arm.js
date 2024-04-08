@@ -58,8 +58,8 @@ class Arm {
     let myFore = p5.Vector.sub(this.foreRotation, this.foreOffset);
 
     push();
-    // rotateX(myUpper.x);
-    // rotateY(myUpper.y);
+    rotateX(myUpper.y);
+    rotateY(myUpper.x);
     rotateZ(myUpper.z);
 
     translate(0, (-1 * boxHeight) / 2, 0);
@@ -71,9 +71,9 @@ class Arm {
     translate(0, boxHeight / 2, 0);
     sphere(jointRadius);
 
-    rotateX(myFore.x);
-    rotateY(myFore.z);
-    rotateZ(myFore.y);
+    rotateX(myFore.y);
+    rotateY(myFore.x);
+    rotateZ(myFore.z);
 
     box(boxWidth, boxHeight * 2, 30);
 
