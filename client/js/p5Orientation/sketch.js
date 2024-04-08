@@ -64,20 +64,11 @@ async function draw() {
 
   if (upperarmBluetoothManager.connected && deltaTime >= updateInterval) {
     lastUpdate = now;
-    const coord = await upperarmBluetoothManager.getCoord();
+    const coordUpper = await upperarmBluetoothManager.getCoord();
+    const coordFore = await forearmBluetoothManager.getCoord();
 
-    if (coord && coord[0] != 0 && coord[1] != 0 && coord[2] != 0) {
-      myArm.updateUpperRotation(coord);
-    }
-  }
-
-  if (forearmBluetoothManager.connected && deltaTime >= updateInterval) {
-    lastUpdate = now;
-    const coord = await forearmBluetoothManager.getCoord();
-
-    if (coord && coord[0] != 0 && coord[1] != 0 && coord[2] != 0) {
-      myArm.updateForeRotation(coord);
-    }
+    myArm.updateUpperRotation(coordUpper);
+    myArm.updateForeRotation(coordFore);
   }
 
   background(250);

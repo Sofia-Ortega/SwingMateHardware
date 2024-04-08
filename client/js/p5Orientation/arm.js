@@ -11,12 +11,19 @@ class Arm {
     this.upperValues = [];
   }
 
-  updateUpperRotation(rotations) {
-    this.upperRotation.set(rotations[0], rotations[1], rotations[2]);
+  // coord: [x, y, z]
+  isValidRotationCoord(coord) {
+    // check if coord and not every coord is 0
+    return coord && Array.isArray(coord) && coord.every((val) => val != 0);
   }
 
+  // rotations: [x, y, z]
   updateForeRotation(rotations) {
-    this.foreValues.push(rotations); // Array of 3 length Array
+    // validate data
+    this.isValidRotationCoord(rotations);
+
+    // moving average
+    this.foreValues.push(rotations);
     if (this.foreValues.length > this.windowSize) {
       this.foreValues.shift();
     }
@@ -25,13 +32,17 @@ class Arm {
     for (let value of this.foreValues) {
       avg.add(value);
     }
-
     avg.div(this.foreValues.length);
     this.foreRotation.set(avg);
   }
 
+  // rotations: [x, y, z]
   updateUpperRotation(rotations) {
-    this.upperValues.push(rotations); // Array of 3 length Array
+    // validate data
+    this.isValidRotationCoord(rotations);
+
+    // moving average
+    this.upperValues.push(rotations);
     if (this.upperValues.length > this.windowSize) {
       this.upperValues.shift();
     }
