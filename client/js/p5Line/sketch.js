@@ -4,13 +4,13 @@ const CANVAS_HEIGHT = 400;
 const CENTER_X = CANVAS_WIDTH / 2;
 const CENTER_Y = CANVAS_HEIGHT / 2;
 
-const UPPERARM_LENGTH = 50;
+const LENGTH = 50;
 
 let shoulder, elbow, wrist;
 let upperarmAngle = 0;
 let forearmAngle = 0;
 
-let angleChange = 5;
+let angleChange = 0.5;
 
 let displayUpper;
 let displayFore;
@@ -23,8 +23,8 @@ function setup() {
   debugMode(100, 10, 0, 0, 0, 20, 0, -40, 0);
 
   shoulder = createVector(0, 0, 0);
-  elbow = createVector(UPPERARM_LENGTH, 0, 0);
-  wrist = createVector(0, UPPERARM_LENGTH, 0);
+  elbow = createVector(LENGTH, 0, 0);
+  wrist = createVector(0, LENGTH, 0);
 
   // upper arm
   let upperarmAnglePlusBtn = createButton("Upper +");
