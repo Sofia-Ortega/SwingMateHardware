@@ -25,6 +25,7 @@ function startRecord() {
 
 function startReplay() {
   if (record) record = false;
+  myArm.resetMovingAverage();
   replayCounter = 0;
   replay = true;
 }
@@ -99,13 +100,23 @@ async function draw() {
     const now = millis();
     const deltaTime = now - lastUpdate;
 
-    if (upperarmBluetoothManager.connected && deltaTime >= updateInterval) {
+    // reading sensors
+    if (
+      (upperarmBluetoothManager.connected ||
+        forearmBluetoothManager.connected) &&
+      deltaTime >= updateInterval
+    ) {
       lastUpdate = now;
-      const coordUpper = await upperarmBluetoothManager.getCoord();
-      const coordFore = await forearmBluetoothManager.getCoord();
 
-      myArm.updateUpperRotation(coordUpper);
-      myArm.updateForeRotation(coordFore);
+      if (upperarmBluetoothManager.connected) {
+        const coordUpper = await upperarmBluetoothManager.getCoord();
+        myArm.updateUpperRotation(coordUpper);
+      }
+
+      if (forearmBluetoothManager.connected) {
+        const coordFore = await forearmBluetoothManager.getCoord();
+        myArm.updateForeRotation(coordFore);
+      }
     }
   }
 
@@ -121,7 +132,7 @@ async function draw() {
   }
 
   normalMaterial();
-  myArm.draw();
+  myArm.draw(replay);
 
   // recording data
   if (record) {
@@ -131,11 +142,6 @@ async function draw() {
 
     if (recordCounter <= 0) {
       record = false;
-
-      console.log(recordedData);
-      for (let data in recordedData) {
-        console.log(data);
-      }
     }
   }
 }

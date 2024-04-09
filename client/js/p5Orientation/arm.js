@@ -11,6 +11,11 @@ class Arm {
     this.upperValues = [];
   }
 
+  resetMovingAverage() {
+    this.foreValues = [];
+    this.upperValues = [];
+  }
+
   // coord: [x, y, z]
   isValidRotationCoord(coord) {
     // check if coord and not every coord is 0
@@ -74,13 +79,14 @@ class Arm {
     ];
   }
 
-  draw(myUpper, myFore) {
-    if (myUpper == undefined && myFore == undefined) {
+  draw(noOffset) {
+    let myUpper, myFore;
+    if (!noOffset) {
       myUpper = p5.Vector.sub(this.upperRotation, this.upperOffset);
       myFore = p5.Vector.sub(this.foreRotation, this.foreOffset);
-    } else if (myUpper == undefined || myFore == undefined) {
-      console.error("Arm.draw(myUpper, myFore) must have 0 or 2 parameters");
-      return;
+    } else {
+      myUpper = this.upperRotation;
+      myFore = this.foreRotation;
     }
 
     push();
