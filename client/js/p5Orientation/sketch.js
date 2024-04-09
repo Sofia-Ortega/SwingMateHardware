@@ -9,7 +9,7 @@ let record = false;
 let replay = false;
 let recordedData = [];
 
-const NUM_FRAMES_RECORD = 100;
+const NUM_FRAMES_RECORD = 50;
 let recordCounter = NUM_FRAMES_RECORD;
 let replayCounter = 0;
 
@@ -84,11 +84,14 @@ async function draw() {
       return;
     }
 
-    myArm.updateUpperRotation(recordedData[replayCounter][0]); //
-    myArm.updateForeRotation(recordedData[replayCounter][1]);
+    let upperCoord = recordedData[replayCounter][0];
+    let foreCoord = recordedData[replayCounter][1];
 
-    console.log(recordedData[replayCounter][0]);
-    console.log(recordedData[replayCounter][1]);
+    myArm.updateUpperRotation(upperCoord);
+    myArm.updateForeRotation(foreCoord);
+
+    console.log(upperCoord);
+    console.log(foreCoord);
 
     replayCounter++;
   } else {
@@ -104,10 +107,6 @@ async function draw() {
       myArm.updateUpperRotation(coordUpper);
       myArm.updateForeRotation(coordFore);
     }
-  }
-
-  let backgroundColor = 250;
-  if (record) {
   }
 
   // background(250);
@@ -127,14 +126,16 @@ async function draw() {
   // recording data
   if (record) {
     // -------------- RECORD ----------------------
-    recordedData.push([myArm.getRotationVector()]);
+    recordedData.push(myArm.getRotationVector());
     recordCounter--;
-
-    console.log("RecordCounter:", recordCounter);
 
     if (recordCounter <= 0) {
       record = false;
+
       console.log(recordedData);
+      for (let data in recordedData) {
+        console.log(data);
+      }
     }
   }
 }
