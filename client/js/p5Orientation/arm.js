@@ -64,9 +64,24 @@ class Arm {
     this.foreOffset.set(this.foreRotation);
   }
 
-  draw() {
+  getRotationVector() {
     let myUpper = p5.Vector.sub(this.upperRotation, this.upperOffset);
     let myFore = p5.Vector.sub(this.foreRotation, this.foreOffset);
+
+    return [
+      [myUpper.x, myUpper.y, myUpper.z],
+      [myFore.x, myFore.y, myFore.z],
+    ];
+  }
+
+  draw(myUpper, myFore) {
+    if (myUpper == undefined && myFore == undefined) {
+      myUpper = p5.Vector.sub(this.upperRotation, this.upperOffset);
+      myFore = p5.Vector.sub(this.foreRotation, this.foreOffset);
+    } else if (myUpper == undefined || myFore == undefined) {
+      console.error("Arm.draw(myUpper, myFore) must have 0 or 2 parameters");
+      return;
+    }
 
     push();
     rotateX(myUpper.y);
