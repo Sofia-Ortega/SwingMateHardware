@@ -29,6 +29,12 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
 }
 
+#playSlider::-webkit-slider-thumb {
+  border-radius: 0%;
+  width: 5px;
+  background-color: blue;
+}
+
 input[type="range"]::-moz-range-thumb {
   -webkit-appearance: none;
   pointer-events: all;

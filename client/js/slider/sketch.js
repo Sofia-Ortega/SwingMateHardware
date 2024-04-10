@@ -8,10 +8,19 @@ function setup() {
   const from = select("#fromInput");
   const to = select("#toInput");
 
+  const fromSlider = select("#fromSlider");
+  const playSlider = select("#playSlider");
   btn.mousePressed(() => {
     console.log("Why hello there");
-    console.log(from.value());
-    console.log(to.value());
+    console.log("From:", from.value());
+    console.log("To:", to.value());
+    console.log("FromSlider:", fromSlider.value());
+    console.log("Now Slider", playSlider.value());
+  });
+
+  const playBtn = createButton("Play");
+  playBtn.mousePressed(() => {
+    console.log("PlayBtn in sketch");
   });
 }
 

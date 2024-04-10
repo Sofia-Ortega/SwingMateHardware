@@ -76,8 +76,12 @@ function setToggleAccessible(currentTarget) {
 
 const fromSlider = document.querySelector("#fromSlider");
 const toSlider = document.querySelector("#toSlider");
+const playSlider = document.querySelector("#playSlider");
 const fromInput = document.querySelector("#fromInput");
 const toInput = document.querySelector("#toInput");
+
+const playBtn = document.querySelector("#playBtn");
+
 fillSlider(fromSlider, toSlider, "#C6C6C6", "#25daa5", toSlider);
 setToggleAccessible(toSlider);
 
@@ -86,3 +90,8 @@ toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
 fromInput.oninput = () =>
   controlFromInput(fromSlider, fromInput, toInput, toSlider);
 toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+
+console.log("Play: ", playBtn);
+playBtn.onclick = () => {
+  console.log("CLICK!");
+};
