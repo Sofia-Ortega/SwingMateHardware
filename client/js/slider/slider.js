@@ -1,12 +1,36 @@
 class Slider {
-  constructor(fromSliderIdName, toSliderIdName, playSliderIdName) {
+  constructor(
+    fromSliderIdName,
+    toSliderIdName,
+    playSliderIdName,
+    playBtnIdName
+  ) {
     this.fromSlider = document.querySelector(fromSliderIdName);
     this.toSlider = document.querySelector(toSliderIdName);
     this.playSlider = document.querySelector(playSliderIdName);
+    this.playBtn = document.querySelector(playBtnIdName);
 
     this.fromSlider.oninput = () => this.fromSliderControl();
     this.toSlider.oninput = () => this.toSliderControl();
     this.playSlider.oninput = () => this.playSliderControl();
+
+    // todo:
+    // - manually set min and max of range sliders (min and max index of stored 3d arm)
+
+    // on play btn
+    //  - have animatino replay based on index
+    //  - playSlider value should update on each index
+    //      - bool updatePlaySlider(int newVal) // returns true if successful, false if not
+    // - convert to stop button
+
+    // make crop btn
+    // on crop btn
+    // Array getBorders() // returns [int from, int to]
+    // stored array.splice(to, from)
+
+    // make overlay of arm
+
+    // filter incoming data better (gaussian filter?)
 
     this.sliderColor = "#C6C6C6"; // GREY
     this.rangeColor = "#25daa5"; // GREEN
@@ -38,7 +62,8 @@ class Slider {
   fromSliderControl() {
     this.fillSlider();
 
-    let [fromVal, playVal, toVal] = this.getValuesInt();
+    let fromVal = this.getFromValueInt();
+    let toVal = this.getToValueInt();
 
     if (fromVal > toVal) {
       this.fromSlider.value = toVal;
@@ -49,7 +74,8 @@ class Slider {
   toSliderControl() {
     this.fillSlider();
 
-    let [fromVal, playVal, toVal] = this.getValuesInt();
+    let fromVal = this.getFromValueInt();
+    let toVal = this.getToValueInt();
 
     if (fromVal > toVal) {
       this.toSlider.value = fromVal;
@@ -59,21 +85,15 @@ class Slider {
   }
 
   playSliderControl() {
-    let [fromVal, playVal, toVal] = this.getValuesInt();
+    let fromVal = this.getFromValueInt();
+    let playVal = this.getPlayValueInt();
+    let toVal = this.getToValueInt();
 
     if (playVal < fromVal) {
       this.playSlider.value = fromVal;
     } else if (playVal > toVal) {
       this.playSlider.value = toVal;
     }
-  }
-
-  getValuesInt() {
-    return [
-      this.getFromValueInt(),
-      this.getPlayValueInt(),
-      this.getToValueInt(),
-    ];
   }
 
   getFromValueInt() {
@@ -89,4 +109,4 @@ class Slider {
   }
 }
 
-let slider = new Slider("#fromSlider", "#toSlider", "#playSlider");
+let slider = new Slider("#fromSlider", "#toSlider", "#playSlider", "#playBtn");

@@ -87,11 +87,7 @@ input[type="range"] {
   pointer-events: none;
 }
 
-#fromSlider {
-  height: 0;
-  z-index: 1;
-}
-
+#fromSlider,
 #toSlider {
   height: 0;
   z-index: 1;
