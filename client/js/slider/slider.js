@@ -1,6 +1,9 @@
+const GREY = "#C6C6C6";
+const GREEN = "#25daa5";
+
 function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
   const [from, to] = getParsed(fromInput, toInput);
-  fillSlider(fromInput, toInput, "#C6C6C6", "#25daa5", controlSlider);
+  fillSlider(fromInput, toInput, GREY, GREEN, controlSlider);
   if (from > to) {
     fromSlider.value = to;
     fromInput.value = to;
@@ -11,7 +14,7 @@ function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
 
 function controlToInput(toSlider, fromInput, toInput, controlSlider) {
   const [from, to] = getParsed(fromInput, toInput);
-  fillSlider(fromInput, toInput, "#C6C6C6", "#25daa5", controlSlider);
+  fillSlider(fromInput, toInput, GREY, GREEN, controlSlider);
   setToggleAccessible(toInput);
   if (from <= to) {
     toSlider.value = to;
@@ -23,7 +26,7 @@ function controlToInput(toSlider, fromInput, toInput, controlSlider) {
 
 function controlFromSlider(fromSlider, toSlider, fromInput) {
   const [from, to] = getParsed(fromSlider, toSlider);
-  fillSlider(fromSlider, toSlider, "#C6C6C6", "#25daa5", toSlider);
+  fillSlider(fromSlider, toSlider, GREY, GREEN, toSlider);
   if (from > to) {
     fromSlider.value = to;
     fromInput.value = to;
@@ -32,9 +35,24 @@ function controlFromSlider(fromSlider, toSlider, fromInput) {
   }
 }
 
+function controlPlaySlider(playSlider, fromSlider, toSlider) {
+  const [from, to] = getParsed(fromSlider, toSlider);
+  fillSlider(fromSlider, toSlider, GREY, GREEN, toSlider);
+
+  let playInt = parseInt(playSlider.value, 10);
+
+  if (playInt > to) {
+    playSlider.value = to;
+  } else if (playInt < from) {
+    playSlider.value = from;
+  } else {
+    playSlider.value = playInt;
+  }
+}
+
 function controlToSlider(fromSlider, toSlider, toInput) {
   const [from, to] = getParsed(fromSlider, toSlider);
-  fillSlider(fromSlider, toSlider, "#C6C6C6", "#25daa5", toSlider);
+  fillSlider(fromSlider, toSlider, GREY, GREEN, toSlider);
   setToggleAccessible(toSlider);
   if (from <= to) {
     toSlider.value = to;
@@ -51,10 +69,19 @@ function getParsed(currentFrom, currentTo) {
   return [from, to];
 }
 
+/**
+ *
+ * @param {html_input} from
+ * @param {html_input} to
+ * @param {string} sliderColor
+ * @param {string} rangeColor
+ * @param {html_input} controlSlider
+ */
 function fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
   const rangeDistance = to.max - to.min;
   const fromPosition = from.value - to.min;
   const toPosition = to.value - to.min;
+
   controlSlider.style.background = `linear-gradient(
       to right,
       ${sliderColor} 0%,
@@ -82,16 +109,16 @@ const toInput = document.querySelector("#toInput");
 
 const playBtn = document.querySelector("#playBtn");
 
-fillSlider(fromSlider, toSlider, "#C6C6C6", "#25daa5", toSlider);
+fillSlider(fromSlider, toSlider, GREY, GREEN, toSlider);
 setToggleAccessible(toSlider);
 
 fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
 toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
+playSlider.oninput = () => controlPlaySlider(playSlider, fromSlider, toSlider);
 fromInput.oninput = () =>
   controlFromInput(fromSlider, fromInput, toInput, toSlider);
 toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
 
-console.log("Play: ", playBtn);
 playBtn.onclick = () => {
   console.log("CLICK!");
 };

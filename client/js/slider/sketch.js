@@ -17,11 +17,6 @@ function setup() {
     console.log("FromSlider:", fromSlider.value());
     console.log("Now Slider", playSlider.value());
   });
-
-  const playBtn = createButton("Play");
-  playBtn.mousePressed(() => {
-    console.log("PlayBtn in sketch");
-  });
 }
 
 function draw() {}
