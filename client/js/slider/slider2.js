@@ -38,25 +38,29 @@ class Slider {
   fromSliderControl() {
     this.fillSlider();
 
-    let fromVal = this.getFromValueInt();
-    let toVal = this.getToValueInt();
+    let [fromVal, playVal, toVal] = this.getValuesInt();
 
     if (fromVal > toVal) {
       this.fromSlider.value = toVal;
+    }
+
+    if (fromVal > playVal) {
+      this.playSlider.value = fromVal;
     }
   }
 
   toSliderControl() {
     this.fillSlider();
 
-    let fromVal = this.getFromValueInt();
-    let toVal = this.getToValueInt();
+    let [fromVal, playVal, toVal] = this.getValuesInt();
 
     if (fromVal > toVal) {
       this.toSlider.value = fromVal;
     }
 
-    //this.toSlider.style.zIndex = 0;
+    if (playVal > toVal) {
+      this.playSlider.value = toVal;
+    }
   }
 
   playSliderControl() {
@@ -69,6 +73,14 @@ class Slider {
     } else if (playVal > toVal) {
       this.playSlider.value = toVal;
     }
+  }
+
+  getValuesInt() {
+    return [
+      this.getFromValueInt(),
+      this.getPlayValueInt(),
+      this.getToValueInt(),
+    ];
   }
 
   getFromValueInt() {
