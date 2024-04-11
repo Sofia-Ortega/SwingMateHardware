@@ -24,7 +24,7 @@ class Slider {
     const endRangeColor = (toPosition / rangeDistance) * 100; // - circleActivePercentage
 
     // color the slider on top
-    this.toSlider.style.background = `linear-gradient(
+    this.playSlider.style.background = `linear-gradient(
             to right,
             ${this.sliderColor} 0%,
             ${this.sliderColor} ${startRangeColor}%,
@@ -59,7 +59,6 @@ class Slider {
   }
 
   playSliderControl() {
-    console.log("playyy");
     let [fromVal, playVal, toVal] = this.getValuesInt();
 
     if (playVal < fromVal) {
