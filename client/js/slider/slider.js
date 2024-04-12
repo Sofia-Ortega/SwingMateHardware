@@ -19,7 +19,7 @@ class Slider {
     this.fromSlider = document.createElement("input");
     this.fromSlider.id = "fromSlider";
     this.fromSlider.type = "range";
-    this.fromSlider.value = Math.floor(this.maxVal * 0.1); // Default value
+    this.fromSlider.value = 0;
     this.fromSlider.min = 0;
     this.fromSlider.max = this.maxVal;
     slidersContainer.appendChild(this.fromSlider);
@@ -27,7 +27,7 @@ class Slider {
     this.toSlider = document.createElement("input");
     this.toSlider.id = "toSlider";
     this.toSlider.type = "range";
-    this.toSlider.value = Math.floor(this.maxVal * 0.9); // Default value
+    this.toSlider.value = this.maxVal;
     this.toSlider.min = 0;
     this.toSlider.max = this.maxVal;
     slidersContainer.appendChild(this.toSlider);
@@ -35,7 +35,7 @@ class Slider {
     this.playSlider = document.createElement("input");
     this.playSlider.id = "playSlider";
     this.playSlider.type = "range";
-    this.playSlider.value = Math.floor(this.maxVal * 0.5); // Default value
+    this.playSlider.value = 0;
     this.playSlider.min = 0;
     this.playSlider.max = this.maxVal;
     slidersContainer.appendChild(this.playSlider);
@@ -105,6 +105,10 @@ class Slider {
     } else if (playVal > toVal) {
       this.playSlider.value = toVal;
     }
+  }
+
+  setPlaySlider(val) {
+    this.playSlider.value = val;
   }
 
   getFromValueInt() {
