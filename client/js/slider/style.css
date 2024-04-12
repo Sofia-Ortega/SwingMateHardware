@@ -4,22 +4,34 @@
   align-items: center;
   margin: 100px 20px;
   width: 700px;
+  background-color: #eaf6f6;
+  border-radius: 10px;
 }
 
 #range_container {
   width: 100%;
 }
 
-#playBtn,
-#cropBtn {
-  width: 24px;
-  height: 24px;
-  /* margin: 0 24px; */
+.slider_btn {
+  width: 36px;
+  height: 32px;
+  margin: 0 24px;
   border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+  background-color: #ffffff;
 }
 
-#cropBtn {
-  margin-right: 10px;
+button:hover {
+  background-color: #a9b7cc;
+}
+
+.btn_icon {
+  height: 15px;
 }
 
 #stopIcon {

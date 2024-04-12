@@ -13,12 +13,19 @@
     </div>
 
     <div id="slider_container">
-      <button id="playBtn">
-        <img id="playIcon" src="icons/play-solid.svg" alt="Play" />
-        <img id="stopIcon" src="icons/stop-solid.svg" alt="Stop" />
-      </button>
-      <button id="cropBtn">
-        <img id="cropIcon" src="icons/crop-solid.svg" alt="Crop" />
+      <button class="slider_btn" id="playBtn">
+        <img
+          class="btn_icon"
+          id="playIcon"
+          src="icons/play-solid.svg"
+          alt="Play"
+        />
+        <img
+          class="btn_icon"
+          id="stopIcon"
+          src="icons/stop-solid.svg"
+          alt="Stop"
+        />
       </button>
       <div id="range_container">
         <div class="sliders_control">
@@ -27,6 +34,14 @@
           <input id="playSlider" type="range" value="0" min="0" max="100" />
         </div>
       </div>
+      <button class="slider_btn" id="cropBtn">
+        <img
+          class="btn_icon"
+          id="cropIcon"
+          src="icons/crop-solid.svg"
+          alt="Crop"
+        />
+      </button>
     </div>
   </body>
   <script src="slider.js"></script>
