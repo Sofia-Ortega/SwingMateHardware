@@ -3,20 +3,21 @@ class Slider {
     fromSliderIdName,
     toSliderIdName,
     playSliderIdName,
-    playBtnIdName
+    playBtnIdName,
+    maxVal
   ) {
     this.fromSlider = document.querySelector(fromSliderIdName);
     this.toSlider = document.querySelector(toSliderIdName);
     this.playSlider = document.querySelector(playSliderIdName);
     this.playBtn = document.querySelector(playBtnIdName);
 
+    this.updateMax(maxVal);
+
     this.fromSlider.oninput = () => this.fromSliderControl();
     this.toSlider.oninput = () => this.toSliderControl();
     this.playSlider.oninput = () => this.playSliderControl();
 
     // todo:
-    // - manually set min and max of range sliders (min and max index of stored 3d arm)
-
     // on play btn
     //  - have animatino replay based on index
     //  - playSlider value should update on each index
@@ -34,6 +35,14 @@ class Slider {
 
     this.sliderColor = "#C6C6C6"; // GREY
     this.rangeColor = "#25daa5"; // GREEN
+
+    this.fillSlider();
+  }
+
+  updateMax(max) {
+    this.fromSlider.max = max;
+    this.toSlider.max = max;
+    this.playSlider.max = max;
 
     this.fillSlider();
   }
@@ -109,4 +118,15 @@ class Slider {
   }
 }
 
-let slider = new Slider("#fromSlider", "#toSlider", "#playSlider", "#playBtn");
+let slider = new Slider(
+  "#fromSlider",
+  "#toSlider",
+  "#playSlider",
+  "#playBtn",
+  56
+);
+
+let cutBtn = document.querySelector("#cutBtn");
+cutBtn.onclick = () => {
+  slider.updateMax(32);
+};
