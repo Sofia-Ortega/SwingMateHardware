@@ -1,9 +1,4 @@
 // todo:
-// make crop btn
-// on crop btn
-// Array getBorders() // returns [int from, int to]
-// stored array.splice(to, from)
-
 // make overlay of arm
 
 // filter incoming data better (gaussian filter?)
@@ -34,6 +29,9 @@ let recordBtn;
 let playBtn;
 let cropBtn;
 
+let stopIcon;
+let playIcon;
+
 function onFinishRecording() {
   record = false;
   console.log(recordData);
@@ -43,7 +41,6 @@ function onFinishRecording() {
     slider = new Slider(NUM_OF_FRAMES_TO_RECORD - 1);
     slider.playSlider.addEventListener("playSliderUpdate", () => {
       playIndex = slider.getPlayValueInt();
-      console.log("received!!:", playIndex);
     });
   } else {
     slider.updateMax(NUM_OF_FRAMES_TO_RECORD - 1);
@@ -62,6 +59,9 @@ function setup() {
 
   rect(30, 20, 55, 55);
 
+  stopIcon = select("#stopIcon");
+  playIcon = select("#playIcon");
+
   const btn = createButton("Print min, max");
   btn.mousePressed(() => {
     const fromSlider = select("#fromSlider");
@@ -71,6 +71,8 @@ function setup() {
       `Sliders: [${fromSlider.value()}, ${playSlider.value()}, ${toSlider.value()}] `
     );
   });
+
+  let slider = new Slider(100);
 
   recordBtn = select("#recordBtn");
   recordBtn.mousePressed(() => {
@@ -91,11 +93,14 @@ function setup() {
       ) {
         playIndex = slider.getFromValueInt();
       }
-      playBtn.html("Stop");
+
+      stopIcon.show();
+      playIcon.hide();
       play = true;
     } else {
       play = false;
-      playBtn.html("Play");
+      stopIcon.hide();
+      playIcon.show();
     }
   });
 
@@ -156,7 +161,9 @@ function draw() {
 
       if (playIndex >= slider.getToValueInt()) {
         play = false;
-        playBtn.html("Play");
+
+        stopIcon.hide();
+        playIcon.show();
       }
     }
   }

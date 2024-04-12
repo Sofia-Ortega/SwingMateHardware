@@ -9,21 +9,23 @@
     <div class="btn_control">
       <div>
         <button id="recordBtn">Record</button>
-        <button id="playBtn">Play</button>
         <button id="cropBtn">Crop</button>
       </div>
     </div>
-    <div class="range_container">
-      <div class="sliders_control"></div>
-    </div>
 
-    <!-- <div class="range_container">
-      <div class="sliders_control">
-        <input id="fromSlider" type="range" value="10" min="0" max="100" />
-        <input id="toSlider" type="range" value="90" min="0" max="100" />
-        <input id="playSlider" type="range" value="50" min="0" max="100" />
+    <div id="slider_container">
+      <button id="playBtn">
+        <img id="playIcon" src="icons/play-solid.svg" alt="Play" />
+        <img id="stopIcon" src="icons/stop-solid.svg" alt="Play" />
+      </button>
+      <div id="range_container">
+        <div class="sliders_control">
+          <input id="fromSlider" type="range" value="0" min="0" max="100" />
+          <input id="toSlider" type="range" value="100" min="0" max="100" />
+          <input id="playSlider" type="range" value="0" min="0" max="100" />
+        </div>
       </div>
-    </div> -->
+    </div>
   </body>
   <script src="slider.js"></script>
 </html>
