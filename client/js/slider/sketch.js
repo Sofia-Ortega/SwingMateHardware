@@ -1,10 +1,4 @@
 // todo:
-// on play btn
-//  - have animatino replay based on index
-//  - playSlider value should update on each index
-//      - bool updatePlaySlider(int newVal) // returns true if successful, false if not
-// - convert to stop button
-
 // make crop btn
 // on crop btn
 // Array getBorders() // returns [int from, int to]
@@ -30,19 +24,33 @@ let recordData = []; // [ [x, y], ...]
 let record = false;
 let recordFrameCounter = NUM_OF_FRAMES_TO_RECORD;
 
-let slider;
+let slider = null;
 
+let replayState = false;
 let play = false;
 let playIndex = 0;
 
 let recordBtn;
 let playBtn;
+let cropBtn;
 
 function onFinishRecording() {
   record = false;
   console.log(recordData);
-  slider = new Slider(NUM_OF_FRAMES_TO_RECORD);
+  playIndex = 0;
+
+  if (slider == null) {
+    slider = new Slider(NUM_OF_FRAMES_TO_RECORD - 1);
+    slider.playSlider.addEventListener("playSliderUpdate", () => {
+      playIndex = slider.getPlayValueInt();
+      console.log("received!!:", playIndex);
+    });
+  } else {
+    slider.updateMax(NUM_OF_FRAMES_TO_RECORD - 1);
+  }
+
   recordBtn.html("Rerecord");
+  replayState = true;
 }
 
 function setup() {
@@ -71,6 +79,7 @@ function setup() {
 
     recordFrameCounter = NUM_OF_FRAMES_TO_RECORD;
     record = true;
+    replayState = false;
   });
 
   playBtn = select("#playBtn");
@@ -89,6 +98,9 @@ function setup() {
       playBtn.html("Play");
     }
   });
+
+  cropBtn = select("#cropBtn");
+  cropBtn.mousePressed(() => {});
 }
 
 function draw() {
@@ -100,7 +112,7 @@ function draw() {
     if (recordFrameCounter <= 0) {
       onFinishRecording();
     }
-  } else if (play) {
+  } else if (replayState) {
     background("#6e288a");
   } else {
     background(237, 34, 93);
@@ -124,14 +136,18 @@ function draw() {
     overBox = false;
   }
 
-  if (play) {
-    [bx, by] = recordData[playIndex++];
-    console.log(playIndex - 1, bx, by);
-    slider.setPlaySlider(playIndex);
+  if (replayState) {
+    [bx, by] = recordData[playIndex];
 
-    if (playIndex >= slider.getToValueInt()) {
-      play = false;
-      playBtn.html("Play");
+    if (play) {
+      console.log(playIndex, bx, by);
+      playIndex++;
+      slider.setPlaySlider(playIndex);
+
+      if (playIndex >= slider.getToValueInt()) {
+        play = false;
+        playBtn.html("Play");
+      }
     }
   }
 

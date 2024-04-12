@@ -11,6 +11,8 @@ class Slider {
     this.fromSlider.oninput = () => this.fromSliderControl();
     this.toSlider.oninput = () => this.toSliderControl();
     this.playSlider.oninput = () => this.playSliderControl();
+
+    this.playSliderUpdateEvent = new Event("playSliderUpdate");
   }
 
   createSliders() {
@@ -46,6 +48,10 @@ class Slider {
     this.toSlider.max = max;
     this.playSlider.max = max;
 
+    this.fromSlider.value = 0;
+    this.toSlider.value = max;
+    this.playSlider.value = 0;
+
     this.fillSlider();
   }
 
@@ -80,6 +86,7 @@ class Slider {
       this.fromSlider.value = toVal;
     }
     this.playSlider.value = fromSlider.value;
+    this.broadcastPlaySliderUpdate();
   }
 
   toSliderControl() {
@@ -93,6 +100,7 @@ class Slider {
     }
 
     this.playSlider.value = toSlider.value;
+    this.broadcastPlaySliderUpdate();
   }
 
   playSliderControl() {
@@ -105,6 +113,12 @@ class Slider {
     } else if (playVal > toVal) {
       this.playSlider.value = toVal;
     }
+
+    this.broadcastPlaySliderUpdate();
+  }
+
+  broadcastPlaySliderUpdate() {
+    this.playSlider.dispatchEvent(this.playSliderUpdateEvent);
   }
 
   setPlaySlider(val) {
