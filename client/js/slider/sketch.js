@@ -100,7 +100,17 @@ function setup() {
   });
 
   cropBtn = select("#cropBtn");
-  cropBtn.mousePressed(() => {});
+  cropBtn.mousePressed(() => {
+    let from = slider.getFromValueInt();
+    let to = slider.getToValueInt();
+    let newRangeDist = to - from;
+
+    slider.updateMax(newRangeDist - 1);
+
+    recordData = recordData.slice(from, to + 1);
+
+    playIndex = 0;
+  });
 }
 
 function draw() {
