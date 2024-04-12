@@ -1,3 +1,22 @@
+// todo:
+// on play btn
+//  - have animatino replay based on index
+//  - playSlider value should update on each index
+//      - bool updatePlaySlider(int newVal) // returns true if successful, false if not
+// - convert to stop button
+
+// make crop btn
+// on crop btn
+// Array getBorders() // returns [int from, int to]
+// stored array.splice(to, from)
+
+// make overlay of arm
+
+// filter incoming data better (gaussian filter?)
+
+this.sliderColor = "#C6C6C6"; // GREY
+this.rangeColor = "#25daa5"; // GREEN
+
 let bx;
 let by;
 let boxSize = 75;
@@ -11,6 +30,10 @@ let recordData = []; // [ [x, y], ...]
 let record = false;
 let recordFrameCounter = NUM_OF_FRAMES_TO_RECORD;
 
+let slider;
+
+let replay = false;
+let replayIndex = 0;
 function setup() {
   createCanvas(400, 400);
   bx = width / 2.0;
@@ -39,6 +62,17 @@ function setup() {
     recordFrameCounter = NUM_OF_FRAMES_TO_RECORD;
     record = true;
   });
+
+  const replayBtn = select("#replayBtn");
+  replayBtn.mousePressed(() => {
+    replayIndex = 0;
+    replay = true;
+  });
+
+  const createSliderBtn = select("#createSliderBtn");
+  createSliderBtn.mousePressed(() => {
+    let mySlider = new Slider(100);
+  });
 }
 
 function draw() {
@@ -50,7 +84,10 @@ function draw() {
     if (recordFrameCounter <= 0) {
       record = false;
       console.log(recordData);
+      slider = new Slider(100);
     }
+  } else if (replay) {
+    background("#6e288a");
   } else {
     background(237, 34, 93);
   }
@@ -71,6 +108,15 @@ function draw() {
     stroke(156, 39, 176);
     fill(244, 122, 158);
     overBox = false;
+  }
+
+  if (replay) {
+    [bx, by] = recordData[replayIndex++];
+    console.log(bx, by);
+
+    if (replayIndex >= recordData.length) {
+      replay = false;
+    }
   }
 
   // Draw the box

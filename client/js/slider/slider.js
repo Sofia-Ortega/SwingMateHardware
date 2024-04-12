@@ -1,42 +1,44 @@
 class Slider {
-  constructor(
-    fromSliderIdName,
-    toSliderIdName,
-    playSliderIdName,
-    playBtnIdName,
-    maxVal
-  ) {
-    this.fromSlider = document.querySelector(fromSliderIdName);
-    this.toSlider = document.querySelector(toSliderIdName);
-    this.playSlider = document.querySelector(playSliderIdName);
-    this.playBtn = document.querySelector(playBtnIdName);
+  constructor(maxVal) {
+    this.maxVal = maxVal;
+    this.sliderColor = "#C6C6C6"; // GREY
+    this.rangeColor = "#25daa5"; // GREEN
 
-    this.updateMax(maxVal);
+    this.createSliders();
+    // this.createButtons();
+    this.fillSlider();
 
     this.fromSlider.oninput = () => this.fromSliderControl();
     this.toSlider.oninput = () => this.toSliderControl();
     this.playSlider.oninput = () => this.playSliderControl();
+  }
 
-    // todo:
-    // on play btn
-    //  - have animatino replay based on index
-    //  - playSlider value should update on each index
-    //      - bool updatePlaySlider(int newVal) // returns true if successful, false if not
-    // - convert to stop button
+  createSliders() {
+    const slidersContainer = document.querySelector(".sliders_control");
 
-    // make crop btn
-    // on crop btn
-    // Array getBorders() // returns [int from, int to]
-    // stored array.splice(to, from)
+    this.fromSlider = document.createElement("input");
+    this.fromSlider.id = "fromSlider";
+    this.fromSlider.type = "range";
+    this.fromSlider.value = Math.floor(this.maxVal * 0.1); // Default value
+    this.fromSlider.min = 0;
+    this.fromSlider.max = this.maxVal;
+    slidersContainer.appendChild(this.fromSlider);
 
-    // make overlay of arm
+    this.toSlider = document.createElement("input");
+    this.toSlider.id = "toSlider";
+    this.toSlider.type = "range";
+    this.toSlider.value = Math.floor(this.maxVal * 0.9); // Default value
+    this.toSlider.min = 0;
+    this.toSlider.max = this.maxVal;
+    slidersContainer.appendChild(this.toSlider);
 
-    // filter incoming data better (gaussian filter?)
-
-    this.sliderColor = "#C6C6C6"; // GREY
-    this.rangeColor = "#25daa5"; // GREEN
-
-    this.fillSlider();
+    this.playSlider = document.createElement("input");
+    this.playSlider.id = "playSlider";
+    this.playSlider.type = "range";
+    this.playSlider.value = Math.floor(this.maxVal * 0.5); // Default value
+    this.playSlider.min = 0;
+    this.playSlider.max = this.maxVal;
+    slidersContainer.appendChild(this.playSlider);
   }
 
   updateMax(max) {
@@ -117,16 +119,3 @@ class Slider {
     return parseInt(this.playSlider.value, 10);
   }
 }
-
-let slider = new Slider(
-  "#fromSlider",
-  "#toSlider",
-  "#playSlider",
-  "#playBtn",
-  56
-);
-
-let cutBtn = document.querySelector("#cutBtn");
-cutBtn.onclick = () => {
-  slider.updateMax(32);
-};
