@@ -8,8 +8,8 @@
 
 using std::string;
 
-// const string DEVICE_NAME = "UPPERARM_CHIP"; // UPPERARM 
-const string DEVICE_NAME = "FOREARM_CHIP"; // FOREARM 
+const string DEVICE_NAME = "UPPERARM_CHIP"; // UPPERARM 
+//const string DEVICE_NAME = "FOREARM_CHIP"; // FOREARM 
 
 const string SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const string CHARACTERISTIC_UUID =  "beb5483e-36e1-4688-b7f5-ea07361b26a8";
@@ -76,14 +76,6 @@ void loop() {
     y = event.orientation.y;
     z = event.orientation.z;
 
-    /* Display the floating point data */
-    Serial.print("X: ");
-    Serial.print(x, 4);
-    Serial.print("\tY: ");
-    Serial.print(y, 4);
-    Serial.print("\tZ: ");
-    Serial.print(z, 4);
-    Serial.println("");
 
     // moving average
 
@@ -93,5 +85,5 @@ void loop() {
     pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
   } 
 
-  delay(100); // Add delay if needed to control the data rate
+  // delay(100); // Add delay if needed to control the data rate
 }
