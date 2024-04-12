@@ -94,23 +94,23 @@ class Arm {
     rotateY(myUpper.x);
     rotateZ(myUpper.z);
 
-    translate(0, (-1 * boxHeight) / 2, 0);
-    sphere(jointRadius);
-    translate(0, boxHeight / 2, 0);
+    translate(0, (-1 * BOX_HEIGHT) / 2, 0);
+    sphere(JOINT_RADIUS);
+    translate(0, BOX_HEIGHT / 2, 0);
 
-    box(boxWidth, boxHeight, 30);
+    box(BOX_WIDTH, BOX_HEIGHT, 30);
 
-    translate(0, boxHeight / 2, 0);
-    sphere(jointRadius);
+    translate(0, BOX_HEIGHT / 2, 0);
+    sphere(JOINT_RADIUS);
 
     rotateX(myFore.y);
     rotateY(myFore.x);
     rotateZ(myFore.z);
 
-    box(boxWidth, boxHeight * 2, 30);
+    box(BOX_WIDTH, BOX_HEIGHT * 2, 30);
 
-    translate(0, boxHeight, 0);
-    sphere(jointRadius);
+    translate(0, BOX_HEIGHT, 0);
+    sphere(JOINT_RADIUS);
 
     pop();
   }

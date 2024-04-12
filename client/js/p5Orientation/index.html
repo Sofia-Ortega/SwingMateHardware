@@ -2,11 +2,21 @@
   <head>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
     <script src="constants.js"></script>
+    <script src="myDom.js"></script>
     <script src="bluetooth.js"></script>
     <script src="arm.js"></script>
     <script src="sketch.js"></script>
   </head>
   <body>
-    <main></main>
+    <main>
+      <button id="connect_upper_btn">Connect Upperarm</button>
+      <button id="zero_upper_btn">Zero Upperarm</button>
+      <button id="connect_fore_btn">Connect Forearm</button>
+      <button id="zero_fore_btn">Zero Forearm</button>
+      <div>
+        <button id="record_btn">Record</button>
+        <button id="replay_btn">Replay</button>
+      </div>
+    </main>
   </body>
 </html>

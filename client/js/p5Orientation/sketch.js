@@ -1,21 +1,16 @@
-const boxHeight = 150;
-const boxWidth = 30;
-const jointRadius = 30;
-
 let lastUpdate = 0;
-const updateInterval = 100; // milliseconds
 
 let record = false;
 let replay = false;
 let recordedData = [];
 
-const NUM_FRAMES_RECORD = 50;
 let recordCounter = NUM_FRAMES_RECORD;
 let replayCounter = 0;
 
 let upperarmBluetoothManager;
 let forearmBluetoothManager;
 let myArm;
+let myDom;
 
 function startRecord() {
   recordCounter = NUM_FRAMES_RECORD;
@@ -35,46 +30,16 @@ function setup() {
   forearmBluetoothManager = new BluetoothManager(FOREARM_CHIP_NAME);
 
   myArm = new Arm();
+
   createCanvas(710, 600, WEBGL);
   angleMode(DEGREES);
 
   frameRate(10);
 
-  const connectUpperarmBtn = createButton("connect upperarm");
-  connectUpperarmBtn.mousePressed(() => {
-    upperarmBluetoothManager.scanDevices();
-  });
+  myDom = new Dom(upperarmBluetoothManager, forearmBluetoothManager, myArm);
 
-  const disconnectUpperarmBtn = createButton("disconnect upperarm");
-  disconnectUpperarmBtn.mousePressed(() => {
-    upperarmBluetoothManager.disconnect();
-  });
-
-  const zeroUpper = createButton("zero Upper");
-  zeroUpper.mousePressed(() => {
-    myArm.zeroUpper();
-  });
-
-  const connectForearmBtn = createButton("connect Forearm");
-  connectForearmBtn.mousePressed(() => {
-    forearmBluetoothManager.scanDevices();
-  });
-
-  const disconnectForearmBtn = createButton("disconnect Forearm");
-  disconnectForearmBtn.mousePressed(() => {
-    forearmBluetoothManager.disconnect();
-  });
-
-  const zeroFore = createButton("zero Fore");
-  zeroFore.mousePressed(() => {
-    myArm.zeroFore();
-  });
-
-  const recordBtn = createButton("record");
-  const replayBtn = createButton("replay");
-
-  recordBtn.mousePressed(startRecord);
-  replayBtn.mousePressed(startReplay);
+  myDom.getRecordBtn().mousePressed(startRecord);
+  myDom.getReplayBtn().mousePressed(startReplay);
 }
 
 async function draw() {
@@ -104,7 +69,7 @@ async function draw() {
     if (
       (upperarmBluetoothManager.connected ||
         forearmBluetoothManager.connected) &&
-      deltaTime >= updateInterval
+      deltaTime >= UPDATE_INTERVAL
     ) {
       lastUpdate = now;
 
