@@ -72,8 +72,6 @@ function setup() {
     );
   });
 
-  let slider = new Slider(100);
-
   recordBtn = select("#recordBtn");
   recordBtn.mousePressed(() => {
     if (record) return;
