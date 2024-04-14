@@ -10,6 +10,7 @@ let rotationZ = 0;
 function setup() {
   createCanvas(700, 700, WEBGL);
   angleMode(DEGREES);
+  debugMode();
 }
 
 function draw() {
@@ -40,9 +41,9 @@ function draw() {
   }
 
   push();
+  rotateZ(rotationZ);
   rotateX(rotationX);
   rotateY(rotationY);
-  rotateZ(rotationZ);
 
   // Draw the shoulder sphere
   sphere(JOINT_RADIUS);
@@ -55,12 +56,15 @@ function draw() {
   translate(0, BOX_HEIGHT / 2, 0);
   sphere(JOINT_RADIUS);
 
-  translate(0, BOX_HEIGHT / 2, 0);
+  //translate(0, BOX_HEIGHT / 2, 0);
 
+  rotateZ(frameCount);
   rotateX(frameCount);
   rotateY(frameCount);
-  rotateZ(frameCount);
 
-  box(BOX_WIDTH, BOX_HEIGHT, BOX_DEPTH);
+  box(BOX_WIDTH, BOX_HEIGHT * 2, BOX_DEPTH);
+  translate(0, BOX_HEIGHT, 0);
+  sphere(JOINT_RADIUS, 32, 32);
+
   pop();
 }

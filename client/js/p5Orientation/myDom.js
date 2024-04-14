@@ -4,6 +4,8 @@ class Dom {
     this.foreBluetoothManager = foreBluetoothManager;
     this.myArm = myArm;
 
+    this.header = select(ID_TAGS.HEADER);
+
     this.connectUpperBtn = select(ID_TAGS.CONNECT_UPPER_BTN);
     this.zeroUpperBtn = select(ID_TAGS.ZERO_UPPER_BTN);
     this.connectForeBtn = select(ID_TAGS.CONNECT_FORE_BTN);
@@ -60,5 +62,16 @@ class Dom {
 
   getReplayBtn() {
     return this.replayBtn;
+  }
+
+  setDebugMode(debugMode) {
+    if (debugMode) {
+      this.header.html("Debug Mode");
+      this.connectUpperBtn.hide();
+      this.zeroUpperBtn.hide();
+      this.zeroForeBtn.hide();
+      this.connectForeBtn.hide();
+      this.recordBtn.hide();
+    }
   }
 }

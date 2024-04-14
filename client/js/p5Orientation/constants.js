@@ -12,6 +12,7 @@ const ID_TAGS = {
   ZERO_FORE_BTN: "#zero_fore_btn",
   RECORD_BTN: "#record_btn",
   REPLAY_BTN: "#replay_btn",
+  HEADER: "#header",
 };
 
 // drawing arm

@@ -9,21 +9,40 @@
     <div class="btn_control">
       <div>
         <button id="recordBtn">Record</button>
-        <button id="playBtn">Play</button>
-        <button id="cropBtn">Crop</button>
       </div>
-    </div>
-    <div class="range_container">
-      <div class="sliders_control"></div>
     </div>
 
-    <!-- <div class="range_container">
-      <div class="sliders_control">
-        <input id="fromSlider" type="range" value="10" min="0" max="100" />
-        <input id="toSlider" type="range" value="90" min="0" max="100" />
-        <input id="playSlider" type="range" value="50" min="0" max="100" />
+    <div id="slider_container">
+      <button class="slider_btn" id="playBtn">
+        <img
+          class="btn_icon"
+          id="playIcon"
+          src="icons/play-solid.svg"
+          alt="Play"
+        />
+        <img
+          class="btn_icon"
+          id="stopIcon"
+          src="icons/stop-solid.svg"
+          alt="Stop"
+        />
+      </button>
+      <div id="range_container">
+        <div class="sliders_control">
+          <input id="fromSlider" type="range" value="0" min="0" max="100" />
+          <input id="toSlider" type="range" value="100" min="0" max="100" />
+          <input id="playSlider" type="range" value="0" min="0" max="100" />
+        </div>
       </div>
-    </div> -->
+      <button class="slider_btn" id="cropBtn">
+        <img
+          class="btn_icon"
+          id="cropIcon"
+          src="icons/crop-solid.svg"
+          alt="Crop"
+        />
+      </button>
+    </div>
   </body>
   <script src="slider.js"></script>
 </html>

@@ -4,8 +4,14 @@ class Slider {
     this.sliderColor = "#C6C6C6"; // GREY
     this.rangeColor = "#25daa5"; // GREEN
 
-    this.createSliders();
-    // this.createButtons();
+    this.fromSlider = document.querySelector("#fromSlider");
+    this.toSlider = document.querySelector("#toSlider");
+    this.playSlider = document.querySelector("#playSlider");
+
+    this.sliderContainer = document.querySelector("#slider_container");
+
+    this.updateMax(maxVal);
+
     this.fillSlider();
 
     this.fromSlider.oninput = () => this.fromSliderControl();
@@ -13,34 +19,18 @@ class Slider {
     this.playSlider.oninput = () => this.playSliderControl();
 
     this.playSliderUpdateEvent = new Event("playSliderUpdate");
+
+    this.unhide();
   }
 
-  createSliders() {
-    const slidersContainer = document.querySelector(".sliders_control");
+  hide() {
+    this.sliderContainer.style.display = "none";
+  }
 
-    this.fromSlider = document.createElement("input");
-    this.fromSlider.id = "fromSlider";
-    this.fromSlider.type = "range";
-    this.fromSlider.value = 0;
-    this.fromSlider.min = 0;
-    this.fromSlider.max = this.maxVal;
-    slidersContainer.appendChild(this.fromSlider);
-
-    this.toSlider = document.createElement("input");
-    this.toSlider.id = "toSlider";
-    this.toSlider.type = "range";
-    this.toSlider.value = this.maxVal;
-    this.toSlider.min = 0;
-    this.toSlider.max = this.maxVal;
-    slidersContainer.appendChild(this.toSlider);
-
-    this.playSlider = document.createElement("input");
-    this.playSlider.id = "playSlider";
-    this.playSlider.type = "range";
-    this.playSlider.value = 0;
-    this.playSlider.min = 0;
-    this.playSlider.max = this.maxVal;
-    slidersContainer.appendChild(this.playSlider);
+  unhide() {
+    console.log("unhidding");
+    console.log(this.sliderContainer);
+    this.sliderContainer.style.display = "flex";
   }
 
   updateMax(max) {
