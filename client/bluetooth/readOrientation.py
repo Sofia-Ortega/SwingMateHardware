@@ -4,8 +4,8 @@ from time import sleep
 import struct
 
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-CHIP_NAME = "UPPERARM_CHIP"
-# CHIP_NAME = "FOREARM_CHIP"
+# CHIP_NAME = "UPPERARM_CHIP"
+CHIP_NAME = "FOREARM_CHIP"
 
 def parse_orientation_data(value):
     # Ensure the received value is not empty and has a length of 12 bytes (3 floats * 4 bytes each)
@@ -34,10 +34,11 @@ async def connect_to_device(address):
   print("about to connect")
   async with BleakClient(address) as client:
     print("Connected to device:", address)
+    print("--------------------------");
 
-    counter = 250
+    counter = 50
 
-    print("[")
+    print("data = [")
 
     # READS VALUE
     while counter >= 0:
@@ -46,7 +47,6 @@ async def connect_to_device(address):
       if orientation_data:
         x, y, z = orientation_data
         print(f"[{x}, {y}, {z}],")
-        # print("Orientation data (X, Y, Z):", orientation_data)
 
       sleep(0.1)
 
