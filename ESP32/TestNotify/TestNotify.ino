@@ -92,11 +92,13 @@ void loop() {
     sensors_event_t event;
     bno.getEvent(&event);
 
-    // float data[4] = {(float)millis(), event.orientation.x, event.orientation.y, event.orientation.z};
+    unsigned long currentTime = millis();
+    Serial.println(currentTime);
+    float data[4] = {(float)currentTime, event.orientation.x, event.orientation.y, event.orientation.z};
 
-    float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
+    //float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
 
-    pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
+    pCharacteristic->setValue((uint8_t*)data, sizeof(data));
     pCharacteristic->notify();
     delay(1000);
   }

@@ -29,6 +29,7 @@ function onCharactieristicValueChanged(event) {
     value.getFloat32(0, true),
     value.getFloat32(4, true),
     value.getFloat32(8, true),
+    value.getFloat32(12, true),
   ];
 
   console.log(coord);
