@@ -8,14 +8,16 @@
 
 using std::string;
 
-const string DEVICE_NAME = "UPPERARM_CHIP"; // UPPERARM 
-//const string DEVICE_NAME = "FOREARM_CHIP"; // FOREARM 
+//const string DEVICE_NAME = "UPPERARM_CHIP"; // UPPERARM 
+const string DEVICE_NAME = "FOREARM_CHIP"; // FOREARM 
 
 const string SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const string CHARACTERISTIC_UUID =  "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
 float orientation[5][3];
 int counter = 0;
+uint8_t myVal = 0;
+
 
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
@@ -26,6 +28,7 @@ bool deviceConnected = false;
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     deviceConnected = true;
+    myVal = 0;
     Serial.println("Connected!");
   }
 
@@ -74,18 +77,25 @@ void loop() {
   bno.getEvent(&event);
   if(deviceConnected) {
 
+    /*
     float x, y, z;
     x = event.orientation.x;
     y = event.orientation.y;
     z = event.orientation.z;
 
-
-    // moving average
-
-
-    float orientation[3] = { x, y, z};
-    
+    float orientation[3] = { x, y, z };
     pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
+
+    */
+
+
+    myVal++;
+    pCharacteristic->setValue(&myVal, 1);
+    pCharacteristic->notify();
+
+
+
+    delay(1500);
   } 
 
   // delay(100); // Add delay if needed to control the data rate

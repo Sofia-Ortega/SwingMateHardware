@@ -67,16 +67,16 @@ class BluetoothManager {
     }
   }
 
+  readValue = () => {
+    return new Promise((resolve, reject) => {
+      this.characteristic.readValue().then(resolve).catch(reject);
+    });
+  };
+
   async getCoord() {
     if (!this.connected) {
       return [0, 0, 0];
     }
-
-    const readValue = () => {
-      return new Promise((resolve, reject) => {
-        this.characteristic.readValue().then(resolve).catch(reject);
-      });
-    };
 
     try {
       const val = await readValue();
@@ -95,6 +95,27 @@ class BluetoothManager {
 
   isConnected() {
     return this.connected;
+  }
+
+  async printVal() {
+    console.log("Value changed");
+    const val = await this.readValue();
+    console.log("Val:", val);
+  }
+
+  async getCounter() {
+    console.log(this.characteristic);
+    this.characteristic.characteristicvaluechanged = () => {
+      console.log("PRINT");
+    };
+
+    console.log(this.characteristic);
+    /*
+    this.characteristic.addEventListener(
+      "characteristicvaluechanged",
+      this.printVal
+    );
+    */
   }
 
   test() {
