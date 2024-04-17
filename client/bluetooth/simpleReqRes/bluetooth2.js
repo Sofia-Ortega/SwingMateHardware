@@ -3,19 +3,6 @@ const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
 let characteristic;
 
-class Data {
-  constructor(dataView) {
-    this.timeStamp = dataView.getFloat32(0, true);
-    this.x = dataView.getFloat32(4, true);
-    this.y = dataView.getFloat32(8, true);
-    this.z = dataView.getFloat32(12, true);
-  }
-
-  print() {
-    console.log(`${this.timeStamp}ms: [${this.x}, ${this.y}, ${this.z}]`);
-  }
-}
-
 let connectBtn = document.querySelector("#connectBtn");
 connectBtn.onclick = async () => {
   const device = await navigator.bluetooth.requestDevice({
@@ -36,6 +23,17 @@ connectBtn.onclick = async () => {
 };
 
 function onCharactieristicValueChanged(event) {
-  let data = new Data(event.target.value);
-  data.print();
+  const A_COORD_LENGTH = 16; //  4 floats stored per coord * 4 bytes
+
+  dataView = event.target.value;
+  let numOfCoords = dataView.byteLength / A_COORD_LENGTH;
+
+  for (let i = 0; i < numOfCoords; i++) {
+    let timeStamp = dataView.getFloat32(0, true);
+    let x = dataView.getFloat32(4, true);
+    let y = dataView.getFloat32(8, true);
+    let z = dataView.getFloat32(12, true);
+
+    console.log(`${timeStamp} ms: [${x}, ${y}, ${z}]`);
+  }
 }

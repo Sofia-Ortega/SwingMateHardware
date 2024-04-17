@@ -24,11 +24,17 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
+const int NUM_OF_COORDS = 5;
+const int COORD_SIZE = 4;
+
+unsigned long START_TIME = millis();
+
 # define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 # define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
+      START_TIME = millis();
       deviceConnected = true;
     };
 
@@ -92,8 +98,11 @@ void loop() {
     sensors_event_t event;
     bno.getEvent(&event);
 
-    unsigned long currentTime = millis();
+    unsigned long currentTime = millis() - START_TIME;
     Serial.println(currentTime);
+
+
+    //float data[NUM_OF_COORDS][4]
     float data[4] = {(float)currentTime, event.orientation.x, event.orientation.y, event.orientation.z};
 
     //float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
