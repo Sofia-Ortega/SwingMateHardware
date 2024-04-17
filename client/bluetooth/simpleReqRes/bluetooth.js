@@ -67,6 +67,11 @@ class BluetoothManager {
     }
   }
 
+  onCharacteristicChange(event) {
+    const val = event.target.value.getUint8(0);
+    console.log("CHANGED Val:", val);
+  }
+
   readValue = () => {
     return new Promise((resolve, reject) => {
       this.characteristic.readValue().then(resolve).catch(reject);
@@ -97,28 +102,15 @@ class BluetoothManager {
     return this.connected;
   }
 
-  async printVal() {
-    console.log("Value changed");
-    const val = await this.readValue();
-    console.log("Val:", val);
-  }
-
   async getCounter() {
     console.log(this.characteristic);
-    this.characteristic.characteristicvaluechanged = () => {
-      console.log("PRINT");
-    };
-
-    console.log(this.characteristic);
-    /*
     this.characteristic.addEventListener(
       "characteristicvaluechanged",
-      this.printVal
+      this.onCharacteristicChange
     );
-    */
   }
 
-  test() {
-    console.log("Pring pring");
+  startNotificationsBM() {
+    this.characteristic.startNotifications();
   }
 }

@@ -4,6 +4,7 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
+#include <BLE2902.h>
 #include <string>
 
 using std::string;
@@ -24,6 +25,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 BLECharacteristic *pCharacteristic;
 BLEServer *pServer = NULL;
 bool deviceConnected = false;
+BLE2902 *pBLE2902;
 
 class MyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
@@ -52,12 +54,15 @@ void setup() {
   pCharacteristic = pService->createCharacteristic(
                                      CHARACTERISTIC_UUID,
                                      BLECharacteristic::PROPERTY_READ |
+                                     BLECharacteristic::PROPERTY_WRITE |
                                      BLECharacteristic::PROPERTY_NOTIFY
                                     );
 
-  // starting
-  pService->start();
 
+  pBLE2902 = new BLE2902();
+  pBLE2902->setNotifications(true);  // starting
+  
+  pService->start();
   pServer->getAdvertising()->start();
 
 

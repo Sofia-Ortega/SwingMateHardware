@@ -6,6 +6,17 @@ connectBtn.onclick = () => {
   bm.scanDevices();
 };
 
+let startNotifs = document.querySelector("#startNotifs");
+startNotifs.onclick = () => {
+  bm.startNotificationsBM();
+};
+
+let readVal = document.querySelector("#readVal");
+readVal.onclick = async () => {
+  let val = await bm.readValue();
+  console.log("readVal(): ", val);
+};
+
 /*
 let getCoordBtn = document.querySelector("#getCoordBtn");
 getCoordBtn.onclick = async () => {
