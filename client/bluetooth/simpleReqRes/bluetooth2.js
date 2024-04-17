@@ -23,17 +23,24 @@ connectBtn.onclick = async () => {
 };
 
 function onCharactieristicValueChanged(event) {
-  const A_COORD_LENGTH = 16; //  4 floats stored per coord * 4 bytes
+  const COORD_LENGTH = 16; //  4 floats stored per coord * 4 bytes
 
-  dataView = event.target.value;
-  let numOfCoords = dataView.byteLength / A_COORD_LENGTH;
+  let dataView = event.target.value;
+  let numOfCoords = dataView.byteLength / COORD_LENGTH;
+
+  let receivedData = [];
 
   for (let i = 0; i < numOfCoords; i++) {
-    let timeStamp = dataView.getFloat32(0, true);
-    let x = dataView.getFloat32(4, true);
-    let y = dataView.getFloat32(8, true);
-    let z = dataView.getFloat32(12, true);
+    let offset = i * 16;
 
-    console.log(`${timeStamp} ms: [${x}, ${y}, ${z}]`);
+    let timeStamp = dataView.getFloat32(offset + 0, true);
+    let x = dataView.getFloat32(offset + 4, true);
+    let y = dataView.getFloat32(offset + 8, true);
+    let z = dataView.getFloat32(offset + 12, true);
+
+    receivedData.push([timeStamp, x, y, z]);
+    // console.log(`${timeStamp} ms: [${x}, ${y}, ${z}]`);
   }
+
+  console.table(receivedData);
 }

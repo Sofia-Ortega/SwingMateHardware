@@ -24,7 +24,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
-const int NUM_OF_COORDS = 5;
+const int PACKET_SIZE = 5;
 const int COORD_SIZE = 4;
 
 unsigned long START_TIME = millis();
@@ -95,21 +95,33 @@ void loop() {
   // notify changed value
   if (deviceConnected) {
 
-    sensors_event_t event;
-    bno.getEvent(&event);
-
-    unsigned long currentTime = millis() - START_TIME;
-    Serial.println(currentTime);
 
 
-    //float data[NUM_OF_COORDS][4]
-    float data[4] = {(float)currentTime, event.orientation.x, event.orientation.y, event.orientation.z};
+
+    float packet[PACKET_SIZE][COORD_SIZE];
+    
+    for(int i = 0; i < PACKET_SIZE; i++) {
+      sensors_event_t event;
+      bno.getEvent(&event);
+
+      unsigned long currentTime = millis() - START_TIME;
+
+      packet[i][0] = (float)(currentTime);
+      packet[i][1] = event.orientation.x;
+      packet[i][2] = event.orientation.y;
+      packet[i][3] = event.orientation.z;
+
+      delay(200);
+    }
+
+    // float data[4] = {(float)currentTime, event.orientation.x, event.orientation.y, event.orientation.z};
+    //pCharacteristic->setValue((uint8_t*)data, sizeof(data));
 
     //float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
 
-    pCharacteristic->setValue((uint8_t*)data, sizeof(data));
+    pCharacteristic->setValue((uint8_t*)packet, sizeof(packet));
     pCharacteristic->notify();
-    delay(1000);
+    //delay(1000);
   }
   // disconnecting
   if (!deviceConnected && oldDeviceConnected) {
