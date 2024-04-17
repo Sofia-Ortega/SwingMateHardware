@@ -3,25 +3,29 @@
   Ported to Arduino ESP32 by Evandro Copercini
   updated by chegewara and MoThunderz
 */
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+// ble 
 BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
 BLEDescriptor *pDescr;
 BLE2902 *pBLE2902;
 
+// imu Sensor
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
+// global variables
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
-uint32_t value = 0;
 
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
-
-#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+# define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+# define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
@@ -73,26 +77,39 @@ void setup() {
   pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
   BLEDevice::startAdvertising();
   Serial.println("Waiting a client connection to notify...");
+
+
+  if(!bno.begin()) {
+    Serial.println("no BNO055 detected... check wiring or I2C ADDR");
+  }
 }
 
 void loop() {
-    // notify changed value
-    if (deviceConnected) {
-        pCharacteristic->setValue(value);
-        pCharacteristic->notify();
-        value++;
-        delay(1000);
-    }
-    // disconnecting
-    if (!deviceConnected && oldDeviceConnected) {
-        delay(500); // give the bluetooth stack the chance to get things ready
-        pServer->startAdvertising(); // restart advertising
-        Serial.println("start advertising");
-        oldDeviceConnected = deviceConnected;
-    }
-    // connecting
-    if (deviceConnected && !oldDeviceConnected) {
-        // do stuff here on connecting
-        oldDeviceConnected = deviceConnected;
-    }
+
+  // notify changed value
+  if (deviceConnected) {
+
+    sensors_event_t event;
+    bno.getEvent(&event);
+
+    // float data[4] = {(float)millis(), event.orientation.x, event.orientation.y, event.orientation.z};
+
+    float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
+
+    pCharacteristic->setValue((uint8_t*)orientation, sizeof(orientation));
+    pCharacteristic->notify();
+    delay(1000);
+  }
+  // disconnecting
+  if (!deviceConnected && oldDeviceConnected) {
+    delay(500); // give the bluetooth stack the chance to get things ready
+    pServer->startAdvertising(); // restart advertising
+    Serial.println("start advertising");
+    oldDeviceConnected = deviceConnected;
+  }
+  // connecting
+  if (deviceConnected && !oldDeviceConnected) {
+    // do stuff here on connecting
+    oldDeviceConnected = deviceConnected;
+  }
 }

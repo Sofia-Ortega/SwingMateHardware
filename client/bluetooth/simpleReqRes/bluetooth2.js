@@ -13,15 +13,23 @@ connectBtn.onclick = async () => {
   const server = await device.gatt.connect();
   const service = await server.getPrimaryService(SERVICE_UUID);
   characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+  // start notifications
+  const notificationCharacteristic = await characteristic.startNotifications();
+  notificationCharacteristic.addEventListener(
+    "characteristicvaluechanged",
+    onCharactieristicValueChanged
+  );
 };
 
-let startNotifs = document.querySelector("#startNotifs");
-startNotifs.onclick = async () => {
-  console.log(characteristic);
-  characteristic.startNotifications().then((characteristic) => {
-    characteristic.addEventListener("characteristicvaluechanged", (event) => {
-      var value = event.target.value.getUint8(0);
-      console.log(value);
-    });
-  });
-};
+function onCharactieristicValueChanged(event) {
+  let value = event.target.value;
+
+  const coord = [
+    value.getFloat32(0, true),
+    value.getFloat32(4, true),
+    value.getFloat32(8, true),
+  ];
+
+  console.log(coord);
+}
