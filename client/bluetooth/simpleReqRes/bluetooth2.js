@@ -2,7 +2,6 @@ const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
 let characteristic;
-let totalData = [];
 let startTime;
 
 let connectBtn = document.querySelector("#connectBtn");
@@ -18,11 +17,12 @@ connectBtn.onclick = async () => {
 
   // start notifications
   const notificationCharacteristic = await characteristic.startNotifications();
-  startTime = performance.now();
   notificationCharacteristic.addEventListener(
     "characteristicvaluechanged",
     onCharactieristicValueChanged
   );
+
+  console.log("Setup complete!");
 };
 
 function onCharactieristicValueChanged(event) {
@@ -31,8 +31,7 @@ function onCharactieristicValueChanged(event) {
   let dataView = event.target.value;
   let numOfCoords = dataView.byteLength / COORD_LENGTH;
 
-  let receivedData = [];
-
+  totalData = [];
   for (let i = 0; i < numOfCoords; i++) {
     let offset = i * 16;
 
@@ -44,21 +43,4 @@ function onCharactieristicValueChanged(event) {
     //receivedData.push([timeStamp, x, y, z]);
     totalData.push([timeStamp, x, y, z]);
   }
-
-  console.log(
-    "Difference:",
-    totalData[totalData.length - 1][0] - totalData[0][0]
-  );
-
-  let totalTime = performance.now() - startTime;
-  let averageTime = totalTime / 100;
-
-  console.table(totalData);
-  totalData = [];
-
-  console.log("Total Time:", totalTime);
-  console.log("Average Time:", averageTime);
-
-  startTime = performance.now();
-  // console.table(receivedData);
 }
