@@ -24,8 +24,9 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
-const int PACKET_SIZE = 5;
+const int PACKET_SIZE = 20;
 const int COORD_SIZE = 4;
+const int DELAY_TIME = (1.0 / PACKET_SIZE) * 500; // offset of 500ms
 
 unsigned long START_TIME = millis();
 
@@ -88,6 +89,10 @@ void setup() {
   if(!bno.begin()) {
     Serial.println("no BNO055 detected... check wiring or I2C ADDR");
   }
+
+  Serial.println("DELAY:");
+  Serial.println(DELAY_TIME);
+
 }
 
 void loop() {
@@ -99,6 +104,7 @@ void loop() {
 
 
     float packet[PACKET_SIZE][COORD_SIZE];
+
     
     for(int i = 0; i < PACKET_SIZE; i++) {
       sensors_event_t event;
@@ -111,17 +117,12 @@ void loop() {
       packet[i][2] = event.orientation.y;
       packet[i][3] = event.orientation.z;
 
-      delay(200);
+      delay(DELAY_TIME); 
+       
     }
-
-    // float data[4] = {(float)currentTime, event.orientation.x, event.orientation.y, event.orientation.z};
-    //pCharacteristic->setValue((uint8_t*)data, sizeof(data));
-
-    //float orientation[3] = {event.orientation.x, event.orientation.y, event.orientation.z};
 
     pCharacteristic->setValue((uint8_t*)packet, sizeof(packet));
     pCharacteristic->notify();
-    //delay(1000);
   }
   // disconnecting
   if (!deviceConnected && oldDeviceConnected) {

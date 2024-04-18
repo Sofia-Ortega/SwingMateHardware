@@ -2,6 +2,8 @@ const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
 let characteristic;
+let totalData = [];
+let startTime;
 
 let connectBtn = document.querySelector("#connectBtn");
 connectBtn.onclick = async () => {
@@ -16,6 +18,7 @@ connectBtn.onclick = async () => {
 
   // start notifications
   const notificationCharacteristic = await characteristic.startNotifications();
+  startTime = performance.now();
   notificationCharacteristic.addEventListener(
     "characteristicvaluechanged",
     onCharactieristicValueChanged
@@ -38,9 +41,24 @@ function onCharactieristicValueChanged(event) {
     let y = dataView.getFloat32(offset + 8, true);
     let z = dataView.getFloat32(offset + 12, true);
 
-    receivedData.push([timeStamp, x, y, z]);
-    // console.log(`${timeStamp} ms: [${x}, ${y}, ${z}]`);
+    //receivedData.push([timeStamp, x, y, z]);
+    totalData.push([timeStamp, x, y, z]);
   }
 
-  console.table(receivedData);
+  console.log(
+    "Difference:",
+    totalData[totalData.length - 1][0] - totalData[0][0]
+  );
+
+  let totalTime = performance.now() - startTime;
+  let averageTime = totalTime / 100;
+
+  console.table(totalData);
+  totalData = [];
+
+  console.log("Total Time:", totalTime);
+  console.log("Average Time:", averageTime);
+
+  startTime = performance.now();
+  // console.table(receivedData);
 }
