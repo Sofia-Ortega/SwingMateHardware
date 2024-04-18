@@ -24,9 +24,10 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
-const int PACKET_SIZE = 20;
+const int PACKET_SIZE = 25;
 const int COORD_SIZE = 4;
-const int DELAY_TIME = (1.0 / PACKET_SIZE) * 500; // offset of 500ms
+const int SEND_EVERY_MS = 500;
+const int DELAY_TIME = (1.0 / PACKET_SIZE) * SEND_EVERY_MS; // Send packet size every SEND_EVERY_MS ms 
 
 unsigned long START_TIME = millis();
 
